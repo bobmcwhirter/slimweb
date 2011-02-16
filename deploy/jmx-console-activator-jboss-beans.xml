@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+    <bean name="JmxConsoleActivator" class="org.jboss.web.tomcat.service.ondemand.OnDemandContextProfileManager">
+      
+      <property name="profileService"><inject bean="jboss.profileservice:service=ProfileService"/></property>
+      <property name="onDemandContextIntegrator"><inject bean="WebServer" property="onDemandContextIntegrator"/></property>
+
+      <property name="contextName">jmx-console</property>
+
+      <!-- Build a profile from the contents of this single URI -->
+      <property name="deploymentRoot">${jboss.common.base.url}deploy</property>
+      <property name="singleDeployment">jmx-console.war</property>
+      
+      <!-- 
+        Whether activation of the profile (i.e. deployment of the URI contents)
+        should be deferred until the first request (true) or done as part of
+        the start of this bean (false).
+        
+        WARNING: This configuration option may be altered in a subsequent AS 6.0
+        milestone release.
+        
+        FIXME: https://jira.jboss.org/jira/browse/JBAS-7714        
+        -->
+      <property name="activateOnDemand">${jboss.as.deployment.ondemand:true}</property>
+
+   </bean>
+    
+</deployment>

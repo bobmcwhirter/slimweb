@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <!-- ======================================================================= -->
+   <!-- CORBA ORB service                                                       -->
+   <!-- The ORB is pluggable. This configuration uses JacORB.                   -->
+   <!-- ======================================================================= -->
+
+   <bean name="CorbaORBService" class="org.jboss.iiop.CorbaORBService">
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=CorbaORB", exposedInterface=org.jboss.iiop.CorbaORBServiceMBean)</annotation>
+      <property name="ORBClass">org.jacorb.orb.ORB</property>
+      <property name="ORBSingletonClass">org.jboss.system.ORBSingleton</property>
+      <property name="ORBSingletonDelegate">org.jacorb.orb.ORBSingleton</property>
+      <property name="ORBPropertiesFileName">jacorb.properties</property>
+      <property name="OTSContextPropagationEnabled">true</property>
+      <property name="port">
+         <!-- Get the port from the ServiceBindingManager -->
+         <value-factory bean="ServiceBindingManager" method="getIntBinding" parameter="jboss:service=CorbaORB"/>
+      </property>
+      <!-- uncomment the attribute below to interoperate with IONA's ASP 6.0
+      <property name="sendSASAcceptWithExceptionEnabled">false</property>
+      -->
+      <property name="portableInterceptorInitializers">
+         <list>
+            <!-- the two initializers below are required - do not remove them -->
+            <value>org.jboss.iiop.codebase.CodebaseInterceptorInitializer</value>
+            <value>org.jboss.iiop.csiv2.CSIv2Initializer</value>
+            <!-- comment out to generate IORs with no transaction policy info -->
+            <value>org.jboss.tm.iiop.TxIORInterceptorInitializer</value>
+            <!-- comment out to disable null transaction propagation over IIOP -->
+            <value>org.jboss.tm.iiop.TxServerClientInterceptorInitializer</value>
+            <!-- comment out to disable transaction demarcation over IIOP
+                    Note: for TX over IIOP support in 5.0, use JBossTS JTS instead.
+            -->
+            <value>org.jboss.tm.iiop.TxServerInterceptorInitializer</value>
+            <!-- comment out to disable the Security Attribute Service -->
+            <value>org.jboss.iiop.csiv2.SASInitializer</value>
+         </list>
+      </property>
+      <!-- uncomment to use IIOP over SSL
+      <property name="securityDomain"><inject bean="IIOPSecurityDomain"/></property>
+      -->
+      <!-- uncomment to inject default IOR security settings
+      <property name="defaultIORSecurityConfig"><inject bean="DefaultIORSecurityConfig"/></property>
+      -->
+   </bean>
+
+
+   <!-- ======================================================================= -->
+   <!-- CORBA naming service                                                    -->
+   <!-- ======================================================================= -->
+
+   <bean name="CorbaNamingService" class="org.jboss.iiop.CorbaNamingService">
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=CorbaNaming", exposedInterface=org.jboss.iiop.CorbaNamingServiceMBean)</annotation>
+      <depends>jboss:service=CorbaORB</depends>
+      <depends>jboss:service=Naming</depends>
+   </bean>
+
+   <!-- ======================================================================= -->
+   <!-- IIOP invoker                                                            -->
+   <!-- ======================================================================= -->
+
+   <bean name="IIOPInvoker" class="org.jboss.invocation.iiop.IIOPInvoker">
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=invoker,type=iiop", exposedInterface=org.jboss.invocation.iiop.IIOPInvokerMBean)</annotation>
+      <property name="server"><inject bean="JMXKernel" property="mbeanServer"/></property>
+      <property name="serviceName">jboss:service=invoker,type=iiop</property>
+      <depends>jboss:service=CorbaORB</depends>
+      <depends>jboss:service=Naming</depends>
+   </bean>
+
+   <!-- ======================================================================= -->
+   <!-- Default IOR security settings. This can be used to specify the security -->
+   <!-- settings that must inserted in the IORs of all beans and services that  -->
+   <!-- expose an IIOP view. To use this feature, uncomment this bean, set the  -->
+   <!-- appropriate values, and uncomment the defaultIORSecurityConfig property -->
+   <!-- in CorbaORBService.                                                     -->
+   <!-- NOTE: beans that specify IOR settings in jboss.xml will override the    -->
+   <!-- default security values defined here.                                   -->
+   <!-- ======================================================================= -->
+   <!--
+   <bean name="DefaultIORSecurityConfig" class="org.jboss.metadata.IorSecurityConfigMetaData">
+      <property name="transportConfig">
+         <bean name="DefaultTransportConfig" 
+               class="org.jboss.metadata.IorSecurityConfigMetaData$TransportConfig">
+            <constructor>
+               <parameter><null/></parameter>
+               <parameter name="integrity">supported</parameter>
+               <parameter name="confidentiality">supported</parameter>
+               <parameter name="establishTrustInTarget">none</parameter>
+               <parameter name="establishTrustInClient">none</parameter>
+               <parameter name="detectMisordering">none</parameter>
+               <parameter name="detectReplay">none</parameter>
+            </constructor>
+         </bean>
+      </property>
+      <property name="asContext">
+         <bean name="DefaultAsContextConfig" 
+               class="org.jboss.metadata.IorSecurityConfigMetaData$AsContext">
+            <constructor>
+               <parameter><null/></parameter>
+               <parameter name="authMethod">username_password</parameter>
+               <parameter name="realm">default</parameter>
+               <parameter name="required">true</parameter>
+            </constructor>
+         </bean>
+      </property>
+      <property name="sasContext">
+         <bean name="DefaultSasContextConfig" 
+               class="org.jboss.metadata.IorSecurityConfigMetaData$SasContext">
+            <constructor>
+               <parameter><null/></parameter>
+               <parameter name="callerPropagation" class="java.lang.String">none</parameter>
+            </constructor>
+         </bean>
+      </property>
+   </bean>
+   -->
+ </deployment>
+

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Welds' Services Implementations for JBoss AS
+-->
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <!-- EJB Services Utility class -->
+   <bean name="WeldJBossEjb" class="org.jboss.weld.integration.util.JBossEjb"/>
+
+   <!-- EJB Services: @EJB-style lookup -->
+   <beanfactory name="JBossEjbServices" class="org.jboss.weld.integration.ejb.JBossEjbServices">
+      <property name="resolver"><inject bean="WeldJBossEjb" property="resolver"/></property>
+      <property name="jbossEjb"><inject bean="WeldJBossEjb" /></property>
+   </beanfactory>
+   
+   <!-- EJB Injection Services: @EJB-style injection -->
+   <beanfactory name="JBossEjbInjectionServices" class="org.jboss.weld.integration.ejb.JBossEjbInjectionServices">
+      <property name="resolver"><inject bean="WeldJBossEjb" property="resolver"/></property>
+      <property name="jbossEjb"><inject bean="WeldJBossEjb" /></property>
+   </beanfactory>
+  
+   <!-- JPA Services: @PersistenceContext-style and @PersistenceUnit-style lookup -->
+   <beanfactory name="JBossJpaServices" class="org.jboss.weld.integration.persistence.JBossJpaServices">
+      <property name="persistenceUnitDependencyResolver"><inject bean="PersistenceUnitDependencyResolver" /></property>
+      <property name="jbossEjb"><inject bean="WeldJBossEjb" /></property>
+   </beanfactory>
+  
+   <!-- @Resource-style lookup -->
+   <bean name="JBossResourceServices" class="org.jboss.weld.integration.resource.JBossResourceServices" />
+  
+   <!-- Access to the JTA UserTransaction, and synchronization registration -->
+   <bean name="JBossTransactionServices" class="org.jboss.weld.integration.transaction.JBossTransactionServices">
+      <constructor>
+         <parameter><inject bean="TransactionManager"/></parameter>
+      </constructor>     
+   </bean>
+   
+   <!-- Access to the caller context Principal -->
+   <bean name="JBossSecurityServices" class="org.jboss.weld.integration.security.JBossSecurityServices" />
+  
+</deployment>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Hot deployment scanning
+    
+    $Id: hdscanner-jboss-beans.xml 109650 2010-12-02 16:17:02Z emuckenhuber $
+-->
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+    <bean name="ToolsDeploymentScanner" class="org.jboss.system.tools.DeploymentScanner">
+      <constructor>
+        <parameter><inject bean="ProfileServiceDeploymentRepositoryAdapter"/></parameter>
+      </constructor>
+      <property name="serverConfig"><inject bean="JBossServer" property="configuration"/></property>
+    </bean>
+
+    <bean name="ProfileServiceDeploymentRepositoryAdapter" class="org.jboss.system.tools.LegacyDeploymentScannerAdapter">
+      <property name="profileService"><inject bean="jboss.profileservice:service=ProfileService" /></property>
+      <property name="repositoryManager"><inject bean="ArtifactRepositoryManager" /></property>
+      <property name="actionController"><inject bean="ActionController" /></property>
+      <property name="hdFactory"><inject bean="HDScannerFactory" /></property>
+    </bean>
+
+</deployment>
