@@ -22,7 +22,9 @@
    -->
    <bean name="PersistenceUnitDependencyResolver" class="org.jboss.jpa.resolvers.DynamicPersistenceUnitDependencyResolver"/>
    
+   <!--
    <bean name="XPCResolver" class="org.jboss.ejb3.stateful.EJB3XPCResolver"/>
+   -->
    
    <bean name="PersistenceParsingDeployer" class="org.jboss.jpa.deployers.PersistenceParsingDeployer">
      <property name="filter">
@@ -43,10 +45,12 @@
   <bean name="PersistenceUnitDeployer" class="org.jboss.jpa.deployers.PersistenceUnitDeployer" autowire-candidate="false">
       <property name="defaultPersistenceProperties">
          <map keyClass="java.lang.String" valueClass="java.lang.String">
+            <!--
             <entry>
                <key>hibernate.ejb.resource_scanner</key>
                <value>org.jboss.as.jpa.scanner.HackTLScanner</value>
             </entry>
+            -->
             <entry>
                <key>hibernate.transaction.manager_lookup_class</key>
                <value>org.hibernate.transaction.JBossTransactionManagerLookup</value>

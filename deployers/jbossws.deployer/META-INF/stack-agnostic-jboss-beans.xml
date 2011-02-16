@@ -92,11 +92,13 @@
     <property name="provides">ContainerMetaData, VFSRoot</property>
   </bean>
 
+  <!--
   <bean name="WSInjectionMetaDataDeploymentAspect" class="org.jboss.webservices.integration.injection.InjectionMetaDataDeploymentAspect">
     <property name="requires">WebMetaData</property>
     <property name="provides">InjectionMetaData</property>
     <property name="ejbReferenceResolver"><inject bean="org.jboss.ejb3.ejbref.resolver.EjbReferenceResolver"/></property>
   </bean>
+  -->
 
   <!-- TODO: remove this hacky aspect -->
   <bean name="WSJACCPermissionsDeploymentAspect" class="org.jboss.webservices.integration.security.JACCPermissionsDeploymentAspect">

@@ -5,9 +5,11 @@
     <bean  name="org.jboss.switchboard.WebEnvironmentSwitchBoardDeployer" class="org.jboss.switchboard.mc.deployer.WebEnvironmentSwitchBoardDeployer">
         <constructor><parameter class="org.jboss.reloaded.naming.deployers.javaee.JavaEEComponentInformer"><inject/></parameter></constructor>
     </bean>
+    <!--
     <bean  name="org.jboss.switchboard.EJBEnvironmentSwitchBoardDeployer" class="org.jboss.switchboard.mc.deployer.EJBEnvironmentSwitchBoardDeployer">
         <constructor><parameter class="org.jboss.reloaded.naming.deployers.javaee.JavaEEComponentInformer"><inject/></parameter></constructor>
     </bean>
+    -->
     
     <!--  Resource providers -->
 
@@ -22,11 +24,13 @@
     </bean>
 
     <!-- Resource provider for resource-env-ref of type javax.ejb.EJBContext, javax.ejb.SessionContext -->
+    <!--
     <bean name="org.jboss.switchboard.EJBContextResEnvRefProvider" class="org.jboss.as.ejb3.switchboard.resource.provider.EJBContextResourceEnvRefResourceProvider">
         <constructor>
             <parameter class="java.lang.String"><value>EJBContextBinder</value></parameter>
         </constructor>
     </bean>    
+    -->
 
     <!--  processes resource-env-ref resources (EE.5.8 of Java EE6 spec) -->
     <bean name="org.jboss.switchboard.ResourceEnvRefResourceProvider" class="org.jboss.switchboard.mc.resource.provider.ResourceEnvRefProvider">
@@ -36,6 +40,7 @@
                     <key>javax.xml.ws.WebServiceContext</key>
                     <value><inject bean="org.jboss.switchboard.WebServiceContextResourceProvider"/></value>
                 </entry>
+                <!--
                 <entry>
                     <key>javax.ejb.EJBContext</key>
                     <value><inject bean="org.jboss.switchboard.EJBContextResEnvRefProvider"/></value>
@@ -58,6 +63,7 @@
                         </bean>
                     </value>
                 </entry>
+                -->
                 <entry>
                     <key>javax.transaction.UserTransaction</key>
                     <value>
@@ -132,18 +138,22 @@
     <bean name="org.jboss.switchboard.TransactionSynchronizationResourceProvider" class="org.jboss.as.switchboard.resource.provider.TransactionSynchronizationResourceProvider"/>
 
     <!-- ResourceProvider for java:comp/EJBContext -->
+    <!--
     <bean name="org.jboss.switchboard.EJBContextResourceProvider" class="org.jboss.as.ejb3.switchboard.resource.provider.EJBContextResourceProvider">
         <constructor>
             <parameter class="java.lang.String"><value>EJBContextBinder</value></parameter>
         </constructor>
     </bean>
+    -->
 
     <!-- ResourceProvider for java:comp/TimerService -->
+    <!--
     <bean name="org.jboss.switchboard.TimerServiceResourceProvider" class="org.jboss.as.ejb3.switchboard.resource.provider.TimerServiceResourceProvider">
         <constructor>
             <parameter class="java.lang.String"><value>TimerServiceBinder</value></parameter>
         </constructor>                    
     </bean>
+    -->
     
     
     <!-- Resource provider registry -->
@@ -153,19 +163,25 @@
                 <inject bean="org.jboss.switchboard.EnvEntryResourceProvider"/>
                 <inject bean="org.jboss.switchboard.ResourceEnvRefResourceProvider"/>
                 <inject bean="org.jboss.switchboard.ResourceRefResourceProvider"/>
+                <!--
                 <inject bean="org.jboss.switchboard.MessageDestinationRefResourceProvider"/>
+                -->
                 <inject bean="org.jboss.switchboard.WebServiceRefResourceProvider"/>
                 <inject bean="org.jboss.switchboard.PersistenceUnitResourceProvider"/>
                 <!-- Disabled till we resolve the transient failures with EJB jndi dependencies -->
+                <!--
                 <inject bean="org.jboss.switchboard.EJBLocalRefResourceProvider"/>
                 <inject bean="org.jboss.switchboard.EJBRefResourceProvider"/>
                 <inject bean="org.jboss.switchboard.AnnotatedEJBRefResourceProvider"/>
+                -->
                 <inject bean="org.jboss.switchboard.DataSourceReferenceResourceProvider"/>
                 <inject bean="org.jboss.switchboard.BeanManagerResourceProvider"/>
                 <inject bean="org.jboss.switchboard.ORBRefResourceProvider"/>                
                 <inject bean="org.jboss.switchboard.UserTransactionRefResourceProvider"/>
+                <!--
                 <inject bean="org.jboss.switchboard.EJBContextResourceProvider"/>
                 <inject bean="org.jboss.switchboard.TimerServiceResourceProvider"/>
+                -->
                 <inject bean="org.jboss.switchboard.TransactionSynchronizationResourceProvider"/>
             </list>
         </property>

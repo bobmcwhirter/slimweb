@@ -41,7 +41,9 @@
   <bean name="ArchiveDiscoveryDeployer" class="org.jboss.weld.integration.deployer.env.ArchiveDiscoveryDeployer"/>
 
   <!-- Responsible for discovering Weld classes -->
+  <!--
   <bean name="EjbServicesDeployer" class="org.jboss.weld.integration.deployer.env.EjbServicesDeployer"/>
+  -->
 
   <!-- Responsible for discovering Weld classes -->
    <bean name="DeploymentDeployer" class="org.jboss.weld.integration.deployer.env.JBossDeploymentDeployer"/>
@@ -72,7 +74,9 @@
   <bean name="WeldMcExtensionsIntegrationDeployer" class="org.jboss.weld.integration.deployer.cl.WeldMcExtensionsIntegrationDeployer"/>
 
   <!-- Responsible for inserting the Weld EJB interceptor -->
+  <!--
   <bean name="PostEjbJarMetadataDeployer" class="org.jboss.weld.integration.deployer.metadata.WeldEjbInterceptorMetadataDeployer"/>
+  -->
   
   <!-- Responsible for enabling classloader isolation for Weld jars -->
   <bean name="PostJBossMetadataDeployer" class="org.jboss.weld.integration.deployer.metadata.PostJBossMetadataDeployer"/>
@@ -122,6 +126,7 @@
   <!-- bean name="WeldBeanMetaDataDeployerPlugin" class="org.jboss.weld.integration.deployer.mc.WeldBeanMetaDataDeployerPlugin"/ -->  
 
     <!-- BeanInstantiatorDeployer supporting CDI constructor injection  -->
+    <!--
     <bean name="org.jboss.ejb3.BeanInstantiatorDeployer" class="org.jboss.weld.integration.instantiator.RedirectingBeanInstantiatorDeployer">
       <constructor>
         <parameter class="org.jboss.ejb3.instantiator.spi.BeanInstantiator"><inject bean="org.jboss.ejb3.BeanInstantiator"/></parameter>
@@ -129,6 +134,7 @@
         <parameter class="org.jboss.reloaded.naming.deployers.javaee.JavaEEComponentInformer"><inject bean="NamingJavaEEComponentInformer"/></parameter>
       </constructor>
     </bean>
+    -->
 
   <bean name="org.jboss.switchboard.BeanManagerResourceProvider" class="org.jboss.weld.integration.deployer.jndi.BeanManagerResourceProvider">
       <property name="moduleInformer"><inject bean="NamingJavaEEModuleInformer"/></property>
